@@ -1,5 +1,5 @@
 homepage: "https://www.leadfeeder.com"
 documentation: "https://help.leadfeeder.com/en/articles/3727657-how-to-install-leadfeeder-tracker-using-google-tag-manager-and-the-leadfeeder-tracker-template"
 versions:
-  - sha: 1cc262f2374bd4910e5ac180e436167d5e89134a
+  - sha: 3f69a3143f344f53b2139b864edbbbae21b6838c
     changeNotes: Initial Version
