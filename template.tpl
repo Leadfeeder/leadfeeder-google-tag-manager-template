@@ -51,7 +51,7 @@ const injectScript = require('injectScript');
 setInWindow('ldfdr', {}, false);
 
 const lfTrackerSrc = 'https://sc.lfeeder.com/lftracker_'+ data.lf_tracker_id +'.js';
-injectScript(lfTrackerSrc, data.gtmOnSuccess, data.gtmOnFailure, 'lfTracker');
+injectScript(lfTrackerSrc, data.gtmOnSuccess, data.gtmOnFailure);
 
 
 ___WEB_PERMISSIONS___
