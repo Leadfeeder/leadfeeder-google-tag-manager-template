@@ -211,52 +211,43 @@ ___TESTS___
 scenarios:
 - name: Main test
   code: |-
-    const mockData = {
-        "lf_tracker_id": "v1_w9k315xMkdlB0myP",
-        "autotrack": true
-      };
-
-
-    mock('injectScript', function(url, onSuccess, onFailure) {  assertThat(url).isEqualTo('https://sc.lfeeder.com/lftracker_v1_w9k315xMkdlB0myP.js');
+    mock('injectScript', function(url, onSuccess, onFailure) {  assertThat(url).isEqualTo('https://sc.lfeeder.com/lftracker_v1_abcd.js');
     });
 
     runCode(mockData);
     assertApi('injectScript').wasCalled();
 
-    assertThat(copyFromWindow('ldfdr')._q).isEqualTo([['cfg', 'enableAutoTracking', true, 'w9k315xMkdlB0myP']]);
+    assertThat(copyFromWindow('ldfdr')._q).isEqualTo([['cfg', 'enableAutoTracking', true, 'abcd']]);
 - name: Autotrack disabled test
   code: |-
-    const mockData = {
-      "lf_tracker_id": "v1_w9k315xMkdlB0myP",
-      "autotrack": false
-    };
+    mockData.autotrack = false;
 
     runCode(mockData);
     assertApi('injectScript').wasCalled();
 
-    assertThat(copyFromWindow('ldfdr')._q).isEqualTo([['cfg', 'enableAutoTracking', false, 'w9k315xMkdlB0myP']]);
+    assertThat(copyFromWindow('ldfdr')._q).isEqualTo([['cfg', 'enableAutoTracking', false, 'abcd']]);
 - name: v1 prefix missing test
   code: |-
-    const mockData = {
-        "lf_tracker_id": "w9k315xMkdlB0myP",
-        "autotrack": true
-      };
+    mockData.lf_tracker_id = 'abcd';
 
 
-    mock('injectScript', function(url, onSuccess, onFailure) {  assertThat(url).isEqualTo('https://sc.lfeeder.com/lftracker_v1_w9k315xMkdlB0myP.js');
+    mock('injectScript', function(url, onSuccess, onFailure) {  assertThat(url).isEqualTo('https://sc.lfeeder.com/lftracker_v1_abcd.js');
     });
 
     runCode(mockData);
     assertApi('injectScript').wasCalled();
 
-    assertThat(copyFromWindow('ldfdr')._q).isEqualTo([['cfg', 'enableAutoTracking', true, 'w9k315xMkdlB0myP']]);
+    assertThat(copyFromWindow('ldfdr')._q).isEqualTo([['cfg', 'enableAutoTracking', true, 'abcd']]);
 setup: |-
-  const log = require('logToConsole');
   const copyFromWindow = require('copyFromWindow');
   const setInWindow = require('setInWindow');
 
   setInWindow('ldfdr', undefined, true);
 
+  const mockData = {
+    "lf_tracker_id": "v1_abcd",
+    "autotrack": true
+  };
 
 ___NOTES___
 
