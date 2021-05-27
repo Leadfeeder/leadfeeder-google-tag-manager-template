@@ -60,8 +60,6 @@ ___TEMPLATE_PARAMETERS___
 
 ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 
-const setInWindow = require('setInWindow');
-const callInWindow = require('callInWindow');
 const injectScript = require('injectScript');
 const createArgumentsQueue = require('createArgumentsQueue');
 const encodeUriComponent = require('encodeUriComponent');
@@ -69,9 +67,13 @@ const encodeUriComponent = require('encodeUriComponent');
 // Handle both the case when someone provides a raw tracker ID and the case when the tracker ID is prepended with 'v1_'.
 const versionlessTrackerId = data.lf_tracker_id.indexOf('v1_') == 0 ? data.lf_tracker_id.split('_')[1] : data.lf_tracker_id;
 
-createArgumentsQueue('ldfdr', 'ldfdr._q');
-callInWindow('ldfdr', 'cfg', 'enableAutoTracking', data.autotrack, versionlessTrackerId);
+// The following line creates a `ldfdr` function in `window`.
+// Once called the function appends arguments to `ldfdr._q` array.
+// Leadfeeder Tracker uses the arguments queue during initialization.
+const ldfdr = createArgumentsQueue('ldfdr', 'ldfdr._q');
+ldfdr('cfg', 'enableAutoTracking', data.autotrack, versionlessTrackerId);
 
+// Once the preconfiguration is done we can inject the tracker's code to a page:
 const lfTrackerSrc = 'https://sc.lfeeder.com/lftracker_v1_'+ encodeUriComponent(versionlessTrackerId) +'.js';
 injectScript(lfTrackerSrc, data.gtmOnSuccess, data.gtmOnFailure);
 
