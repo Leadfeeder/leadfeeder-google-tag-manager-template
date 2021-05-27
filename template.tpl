@@ -189,7 +189,7 @@ ___WEB_PERMISSIONS___
                   },
                   {
                     "type": 8,
-                    "boolean": true
+                    "boolean": false
                   }
                 ]
               }
