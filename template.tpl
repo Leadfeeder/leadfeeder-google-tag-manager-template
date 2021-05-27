@@ -43,7 +43,8 @@ ___TEMPLATE_PARAMETERS___
         "type": "NON_EMPTY"
       }
     ],
-    "help": "You can find your Leadfeeder TrackerID in \u003ca href\u003d\"https://app.leadfeeder.com/l/settings/company/tracking\" target\u003d\"_blank\"\u003eLeadfeeder Tracker Settings\u003c/a\u003e"
+    "help": "You can find your Leadfeeder TrackerID in \u003ca href\u003d\"https://app.leadfeeder.com/l/settings/company/tracking\" target\u003d\"_blank\"\u003eLeadfeeder Tracker Settings\u003c/a\u003e",
+    "alwaysInSummary": true
   },
   {
     "type": "CHECKBOX",
@@ -51,7 +52,8 @@ ___TEMPLATE_PARAMETERS___
     "checkboxText": "Automatic tracking",
     "simpleValueType": true,
     "defaultValue": true,
-    "help": "When this checkbox is enabled the tracker will send a pageview event anytime the tag is included.\nDisabling this field might be useful e.g. when Leadfeeder tracker is used with Single Page Applications.\nYou can read more about SPA tracking \u003ca href\u003d\"https://help.leadfeeder.com/en/articles/4519005-customize-your-site-tracking-with-leadfeeder-javascript-api\" target\u003d\"_blank\"\u003eLeadfeeder Help Center\u003c/a\u003e"
+    "help": "When this checkbox is enabled the tracker will send a pageview event anytime the tag is included.\nDisabling this field might be useful e.g. when Leadfeeder tracker is used with Single Page Applications.\nYou can read more about SPA tracking \u003ca href\u003d\"https://help.leadfeeder.com/en/articles/4519005-customize-your-site-tracking-with-leadfeeder-javascript-api\" target\u003d\"_blank\"\u003eLeadfeeder Help Center\u003c/a\u003e",
+    "alwaysInSummary": true
   }
 ]
 
