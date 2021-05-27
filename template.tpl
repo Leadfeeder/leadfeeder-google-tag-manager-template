@@ -43,7 +43,7 @@ ___TEMPLATE_PARAMETERS___
         "type": "NON_EMPTY"
       }
     ],
-    "help": "You can find your Leadfeeder TrackerID in \u003ca href\u003d\"https://app.leadfeeder.com/l/settings/company/tracking\" target\u003d\"_blank\"\u003eLeadfeeder Tracker Settings\u003c/a\u003e",
+    "help": "You can find your Leadfeeder TrackerID in \u003ca href\u003d\"https://app.leadfeeder.com/l/settings/company/tracking/script\" target\u003d\"_blank\"\u003eLeadfeeder Tracker Settings\u003c/a\u003e",
     "alwaysInSummary": true
   },
   {
