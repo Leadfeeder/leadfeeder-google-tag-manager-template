@@ -58,7 +58,6 @@ ___TEMPLATE_PARAMETERS___
 
 ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 
-const log = require('logToConsole');
 const setInWindow = require('setInWindow');
 const callInWindow = require('callInWindow');
 const injectScript = require('injectScript');
@@ -73,6 +72,7 @@ callInWindow('ldfdr', 'cfg', 'enableAutoTracking', data.autotrack, versionlessTr
 
 const lfTrackerSrc = 'https://sc.lfeeder.com/lftracker_v1_'+ encodeUriComponent(versionlessTrackerId) +'.js';
 injectScript(lfTrackerSrc, data.gtmOnSuccess, data.gtmOnFailure);
+
 
 ___WEB_PERMISSIONS___
 
