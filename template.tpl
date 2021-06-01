@@ -38,19 +38,43 @@ ___TEMPLATE_PARAMETERS___
     "name": "lf_tracker_id",
     "displayName": "Leadfeeder Tracker ID",
     "simpleValueType": true,
-    "help": "You can find your Leadfeeder TrackerID in \u003ca href\u003d\"https://app.leadfeeder.com/l/settings/company/tracking\"\u003eLeadfeeder Tracker Settings\u003c/a\u003e"
+    "valueValidators": [
+      {
+        "type": "NON_EMPTY"
+      }
+    ],
+    "help": "You can find your Leadfeeder TrackerID in \u003ca href\u003d\"https://app.leadfeeder.com/l/settings/company/tracking/script\" target\u003d\"_blank\"\u003eLeadfeeder Tracker Settings\u003c/a\u003e",
+    "alwaysInSummary": true
+  },
+  {
+    "type": "CHECKBOX",
+    "name": "autotrack",
+    "checkboxText": "Automatic tracking",
+    "simpleValueType": true,
+    "defaultValue": true,
+    "help": "When this checkbox is enabled the tracker will send a pageview event anytime the tag is included.\nDisabling this field might be useful e.g. when Leadfeeder tracker is used with Single Page Applications.\nYou can read more about SPA tracking \u003ca href\u003d\"https://help.leadfeeder.com/en/articles/4519005-customize-your-site-tracking-with-leadfeeder-javascript-api\" target\u003d\"_blank\"\u003eLeadfeeder Help Center\u003c/a\u003e",
+    "alwaysInSummary": true
   }
 ]
 
 
 ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 
-const setInWindow = require('setInWindow');
 const injectScript = require('injectScript');
+const createArgumentsQueue = require('createArgumentsQueue');
+const encodeUriComponent = require('encodeUriComponent');
 
-setInWindow('ldfdr', {}, false);
+// Handle both the case when someone provides a raw tracker ID and the case when the tracker ID is prepended with 'v1_'.
+const versionlessTrackerId = data.lf_tracker_id.indexOf('v1_') == 0 ? data.lf_tracker_id.split('_')[1] : data.lf_tracker_id;
 
-const lfTrackerSrc = 'https://sc.lfeeder.com/lftracker_'+ data.lf_tracker_id +'.js';
+// The following line creates a `ldfdr` function in `window`.
+// Once called the function appends arguments to `ldfdr._q` array.
+// Leadfeeder Tracker uses the arguments queue during initialization.
+const ldfdr = createArgumentsQueue('ldfdr', 'ldfdr._q');
+ldfdr('cfg', 'enableAutoTracking', data.autotrack, versionlessTrackerId);
+
+// Once the preconfiguration is done we can inject the tracker's code to a page:
+const lfTrackerSrc = 'https://sc.lfeeder.com/lftracker_v1_'+ encodeUriComponent(versionlessTrackerId) +'.js';
 injectScript(lfTrackerSrc, data.gtmOnSuccess, data.gtmOnFailure);
 
 
@@ -133,6 +157,45 @@ ___WEB_PERMISSIONS___
                     "boolean": true
                   }
                 ]
+              },
+              {
+                "type": 3,
+                "mapKey": [
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
+                ],
+                "mapValue": [
+                  {
+                    "type": 1,
+                    "string": "ldfdr._q"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  }
+                ]
               }
             ]
           }
@@ -150,18 +213,45 @@ ___WEB_PERMISSIONS___
 ___TESTS___
 
 scenarios:
-- name: Untitled test 1
+- name: Main test
   code: |-
-    const mockData = {
-      "lf_tracker_id": "v1_abcdef"
-    };
+    mock('injectScript', function(url, onSuccess, onFailure) {  assertThat(url).isEqualTo('https://sc.lfeeder.com/lftracker_v1_abcd.js');
+    });
 
-    // Call runCode to run the template's code.
     runCode(mockData);
+    assertApi('injectScript').wasCalled();
 
-    assertApi('setInWindow').wasCalledWith('ldfdr', {}, false);
-    assertApi('injectScript').wasCalled(1);
+    assertThat(copyFromWindow('ldfdr')._q).isEqualTo([['cfg', 'enableAutoTracking', true, 'abcd']]);
+- name: Autotrack disabled test
+  code: |-
+    mockData.autotrack = false;
 
+    runCode(mockData);
+    assertApi('injectScript').wasCalled();
+
+    assertThat(copyFromWindow('ldfdr')._q).isEqualTo([['cfg', 'enableAutoTracking', false, 'abcd']]);
+- name: v1 prefix missing test
+  code: |-
+    mockData.lf_tracker_id = 'abcd';
+
+
+    mock('injectScript', function(url, onSuccess, onFailure) {  assertThat(url).isEqualTo('https://sc.lfeeder.com/lftracker_v1_abcd.js');
+    });
+
+    runCode(mockData);
+    assertApi('injectScript').wasCalled();
+
+    assertThat(copyFromWindow('ldfdr')._q).isEqualTo([['cfg', 'enableAutoTracking', true, 'abcd']]);
+setup: |-
+  const copyFromWindow = require('copyFromWindow');
+  const setInWindow = require('setInWindow');
+
+  setInWindow('ldfdr', undefined, true);
+
+  const mockData = {
+    "lf_tracker_id": "v1_abcd",
+    "autotrack": true
+  };
 
 ___NOTES___
 
