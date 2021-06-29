@@ -54,6 +54,14 @@ ___TEMPLATE_PARAMETERS___
     "defaultValue": true,
     "help": "When this checkbox is enabled the tracker will send a pageview event anytime the tag is included.\nDisabling this field might be useful e.g. when Leadfeeder tracker is used with Single Page Applications.\nYou can read more about SPA tracking \u003ca href\u003d\"https://help.leadfeeder.com/en/articles/4519005-customize-your-site-tracking-with-leadfeeder-javascript-api\" target\u003d\"_blank\"\u003eLeadfeeder Help Center\u003c/a\u003e",
     "alwaysInSummary": true
+  },
+  {
+    "type": "CHECKBOX",
+    "name": "enable_debug",
+    "checkboxText": "Enable debug script",
+    "simpleValueType": true,
+    "help": "When this checkbox is enabled the tracker adds debug logs.\nDisabling this field reduces the size of the Leadfeeder script.\n",
+    "alwaysInSummary": true
   }
 ]
 
@@ -66,7 +74,8 @@ const encodeUriComponent = require('encodeUriComponent');
 
 // Handle both the case when someone provides a raw tracker ID and the case when the tracker ID is prepended with 'v1_'.
 const versionPrefix = 'v1_';
-const versionlessTrackerId = data.lf_tracker_id.indexOf(versionPrefix) == 0 ? data.lf_tracker_id.substring(versionPrefix.length) : data.lf_tracker_id;
+const startIndex = data.lf_tracker_id.indexOf(versionPrefix) == 0 ? versionPrefix.length : 0;
+const versionlessTrackerId = data.lf_tracker_id.substring(startIndex) + (data.enable_debug ? '_debug' : '');
 
 // The following line creates a `ldfdr` function in `window`.
 // Once called the function appends arguments to `ldfdr._q` array.
@@ -259,6 +268,17 @@ scenarios:
   code: |-
     mockData.lf_tracker_id = 'abcd_debug';
 
+
+    mock('injectScript', function(url, onSuccess, onFailure) {  assertThat(url).isEqualTo('https://sc.lfeeder.com/lftracker_v1_abcd_debug.js');
+    });
+
+    runCode(mockData);
+    assertApi('injectScript').wasCalled();
+
+    assertThat(copyFromWindow('ldfdr')._q).isEqualTo([['cfg', 'enableAutoTracking', true, 'abcd_debug']]);
+- name: enable debug field test
+  code: |-
+    mockData.enable_debug = true;
 
     mock('injectScript', function(url, onSuccess, onFailure) {  assertThat(url).isEqualTo('https://sc.lfeeder.com/lftracker_v1_abcd_debug.js');
     });
