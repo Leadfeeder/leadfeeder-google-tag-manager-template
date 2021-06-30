@@ -58,7 +58,7 @@ ___TEMPLATE_PARAMETERS___
   {
     "type": "CHECKBOX",
     "name": "enable_debug",
-    "checkboxText": "Enable debug script",
+    "checkboxText": "Debug mode",
     "simpleValueType": true,
     "help": "When this checkbox is enabled the tracker will write verbose logs to the browser's developer console.\nWe suggest turning this on only while testing your tracking script in the GTM preview mode. Disabling it reduces the size of the Leadfeeder tracking script and is a suggested option for the production websites.\n",
     "alwaysInSummary": true
@@ -301,4 +301,3 @@ setup: |-
 ___NOTES___
 
 Created on 17/02/2020, 13:30:42
-
