@@ -1,6 +1,8 @@
 homepage: "https://www.leadfeeder.com"
 documentation: "https://help.leadfeeder.com/en/articles/3727657-how-to-install-leadfeeder-tracker-using-google-tag-manager-and-the-leadfeeder-tracker-template"
 versions:
+  - sha: 1276b40b0de281df9a99b5240d2dfcf63892b94d
+    changeNotes: Allow enabling the debug mode
   - sha: 5564454c9f4e00cda83e1797540fe1355aa8f5cf
     changeNotes: Allow setting autotrack option
   - sha: c863155d34683736cec7585d877e0e8609609d4b
