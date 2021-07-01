@@ -54,6 +54,14 @@ ___TEMPLATE_PARAMETERS___
     "defaultValue": true,
     "help": "When this checkbox is enabled the tracker will send a pageview event anytime the tag is included.\nDisabling this field might be useful e.g. when Leadfeeder tracker is used with Single Page Applications.\nYou can read more about SPA tracking \u003ca href\u003d\"https://help.leadfeeder.com/en/articles/4519005-customize-your-site-tracking-with-leadfeeder-javascript-api\" target\u003d\"_blank\"\u003eLeadfeeder Help Center\u003c/a\u003e",
     "alwaysInSummary": true
+  },
+  {
+    "type": "CHECKBOX",
+    "name": "enable_debug",
+    "checkboxText": "Debug mode",
+    "simpleValueType": true,
+    "help": "When this checkbox is enabled the tracker will write verbose logs to the browser's developer console.\nWe suggest turning this on only while testing your tracking script in the GTM preview mode. Disabling it reduces the size of the Leadfeeder tracking script and is a suggested option for the production websites.\n",
+    "alwaysInSummary": true
   }
 ]
 
@@ -65,7 +73,9 @@ const createArgumentsQueue = require('createArgumentsQueue');
 const encodeUriComponent = require('encodeUriComponent');
 
 // Handle both the case when someone provides a raw tracker ID and the case when the tracker ID is prepended with 'v1_'.
-const versionlessTrackerId = data.lf_tracker_id.indexOf('v1_') == 0 ? data.lf_tracker_id.split('_')[1] : data.lf_tracker_id;
+const versionPrefix = 'v1_';
+const startIndex = data.lf_tracker_id.indexOf(versionPrefix) == 0 ? versionPrefix.length : 0;
+const versionlessTrackerId = data.lf_tracker_id.substring(startIndex) + (data.enable_debug ? '_debug' : '');
 
 // The following line creates a `ldfdr` function in `window`.
 // Once called the function appends arguments to `ldfdr._q` array.
@@ -242,6 +252,41 @@ scenarios:
     assertApi('injectScript').wasCalled();
 
     assertThat(copyFromWindow('ldfdr')._q).isEqualTo([['cfg', 'enableAutoTracking', true, 'abcd']]);
+- name: debug script test
+  code: |-
+    mockData.lf_tracker_id = 'v1_abcd_debug';
+
+
+    mock('injectScript', function(url, onSuccess, onFailure) {  assertThat(url).isEqualTo('https://sc.lfeeder.com/lftracker_v1_abcd_debug.js');
+    });
+
+    runCode(mockData);
+    assertApi('injectScript').wasCalled();
+
+    assertThat(copyFromWindow('ldfdr')._q).isEqualTo([['cfg', 'enableAutoTracking', true, 'abcd_debug']]);
+- name: debug script test without v1 prefix
+  code: |-
+    mockData.lf_tracker_id = 'abcd_debug';
+
+
+    mock('injectScript', function(url, onSuccess, onFailure) {  assertThat(url).isEqualTo('https://sc.lfeeder.com/lftracker_v1_abcd_debug.js');
+    });
+
+    runCode(mockData);
+    assertApi('injectScript').wasCalled();
+
+    assertThat(copyFromWindow('ldfdr')._q).isEqualTo([['cfg', 'enableAutoTracking', true, 'abcd_debug']]);
+- name: enable debug field test
+  code: |-
+    mockData.enable_debug = true;
+
+    mock('injectScript', function(url, onSuccess, onFailure) {  assertThat(url).isEqualTo('https://sc.lfeeder.com/lftracker_v1_abcd_debug.js');
+    });
+
+    runCode(mockData);
+    assertApi('injectScript').wasCalled();
+
+    assertThat(copyFromWindow('ldfdr')._q).isEqualTo([['cfg', 'enableAutoTracking', true, 'abcd_debug']]);
 setup: |-
   const copyFromWindow = require('copyFromWindow');
   const setInWindow = require('setInWindow');
