@@ -6,7 +6,7 @@ Template for [Leadfeeder](https://www.leadfeeder.com) tag in
 ## How to change the Leadfeeder GTM template
 
 1. Modify the template code and add unit tests.
-1. Import `template.tpl` in your own GTM account
+1. Import `template.tpl` into some existing GTM account where it could be tested
 1. Make sure all unit tests run successfully.
 1. Commit the changes
 1. Create a PR and request a review.
