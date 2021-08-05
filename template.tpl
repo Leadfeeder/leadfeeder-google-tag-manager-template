@@ -66,7 +66,7 @@ ___TEMPLATE_PARAMETERS___
   {
     "type": "TEXT",
     "name": "tracking_cookie_duration_days",
-    "displayName": "The amount of days until the Leadfeeder tracking cookie expires",
+    "displayName": "[Applicable if Leadfeeder Cookie enabled] The amount of days until the Leadfeeder Cookie expires",
     "simpleValueType": true,
     "defaultValue": 730,
     "valueValidators": [
@@ -74,7 +74,7 @@ ___TEMPLATE_PARAMETERS___
         "type": "POSITIVE_NUMBER"
       }
     ],
-    "help": "Defines for how many days users are tracked via Leadfeeder tracking cookie.",
+    "help": "Defines for how many days users are tracked via Leadfeeder tracking cookie.\nThis setting is ignored in case Leadfeeder Cookie is disabled in Leadfeeder app settings.\n",
     "alwaysInSummary": true
   }
 ]
