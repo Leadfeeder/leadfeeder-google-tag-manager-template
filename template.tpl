@@ -74,7 +74,7 @@ ___TEMPLATE_PARAMETERS___
         "type": "POSITIVE_NUMBER"
       }
     ],
-    "help": "Defines for how many days users are tracked via Leadfeeder tracking cookie.\nThis setting is ignored in case Leadfeeder Cookie is disabled in Leadfeeder app settings.\n",
+    "help": "Defines for how many days between visits visitors are considered the same user. \nThis setting is ignored in case Leadfeeder Cookie is disabled in Leadfeeder app settings.\n",
     "alwaysInSummary": true
   }
 ]
@@ -325,4 +325,3 @@ setup: |-
 ___NOTES___
 
 Created on 17/02/2020, 13:30:42
-
