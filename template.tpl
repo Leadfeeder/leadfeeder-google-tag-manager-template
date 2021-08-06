@@ -75,7 +75,7 @@ const encodeUriComponent = require('encodeUriComponent');
 // Handle both the case when someone provides a raw tracker ID and the case when the tracker ID is prepended with 'v1_'.
 const versionPrefix = 'v1_';
 const startIndex = data.lf_tracker_id.indexOf(versionPrefix) == 0 ? versionPrefix.length : 0;
-const versionlessTrackerId = data.lf_tracker_id.substring(startIndex) + (data.enable_debug ? '_debug' : '');
+const versionlessTrackerId = data.lf_tracker_id.substring(startIndex).replace('_debug', '');
 
 // The following line creates a `ldfdr` function in `window`.
 // Once called the function appends arguments to `ldfdr._q` array.
@@ -84,7 +84,9 @@ const ldfdr = createArgumentsQueue('ldfdr', 'ldfdr._q');
 ldfdr('cfg', 'enableAutoTracking', data.autotrack, versionlessTrackerId);
 
 // Once the preconfiguration is done we can inject the tracker's code to a page:
-const lfTrackerSrc = 'https://sc.lfeeder.com/lftracker_v1_'+ encodeUriComponent(versionlessTrackerId) +'.js';
+const useDebug = data.enable_debug || data.lf_tracker_id.indexOf('_debug') >= 0;
+const lfTrackerSrc = 'https://sc.lfeeder.com/lftracker_v1_' +
+      encodeUriComponent(versionlessTrackerId) + (useDebug ? '_debug' : '') + '.js';
 injectScript(lfTrackerSrc, data.gtmOnSuccess, data.gtmOnFailure);
 
 
@@ -263,7 +265,7 @@ scenarios:
     runCode(mockData);
     assertApi('injectScript').wasCalled();
 
-    assertThat(copyFromWindow('ldfdr')._q).isEqualTo([['cfg', 'enableAutoTracking', true, 'abcd_debug']]);
+    assertThat(copyFromWindow('ldfdr')._q).isEqualTo([['cfg', 'enableAutoTracking', true, 'abcd']]);
 - name: debug script test without v1 prefix
   code: |-
     mockData.lf_tracker_id = 'abcd_debug';
@@ -275,7 +277,7 @@ scenarios:
     runCode(mockData);
     assertApi('injectScript').wasCalled();
 
-    assertThat(copyFromWindow('ldfdr')._q).isEqualTo([['cfg', 'enableAutoTracking', true, 'abcd_debug']]);
+    assertThat(copyFromWindow('ldfdr')._q).isEqualTo([['cfg', 'enableAutoTracking', true, 'abcd']]);
 - name: enable debug field test
   code: |-
     mockData.enable_debug = true;
@@ -286,7 +288,7 @@ scenarios:
     runCode(mockData);
     assertApi('injectScript').wasCalled();
 
-    assertThat(copyFromWindow('ldfdr')._q).isEqualTo([['cfg', 'enableAutoTracking', true, 'abcd_debug']]);
+    assertThat(copyFromWindow('ldfdr')._q).isEqualTo([['cfg', 'enableAutoTracking', true, 'abcd']]);
 setup: |-
   const copyFromWindow = require('copyFromWindow');
   const setInWindow = require('setInWindow');
