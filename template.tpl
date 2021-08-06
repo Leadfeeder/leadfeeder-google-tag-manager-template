@@ -66,7 +66,7 @@ ___TEMPLATE_PARAMETERS___
   {
     "type": "TEXT",
     "name": "tracking_cookie_duration_days",
-    "displayName": "[Applicable if Leadfeeder Cookie enabled] The amount of days until the Leadfeeder Cookie expires",
+    "displayName": "[Applicable if Leadfeeder Cookie enabled] Number of days until the Leadfeeder Cookie expires",
     "simpleValueType": true,
     "defaultValue": 730,
     "valueValidators": [
@@ -325,5 +325,4 @@ setup: |-
 ___NOTES___
 
 Created on 17/02/2020, 13:30:42
-
 
