@@ -1,6 +1,8 @@
 homepage: "https://www.leadfeeder.com"
 documentation: "https://help.leadfeeder.com/en/articles/3727657-how-to-install-leadfeeder-tracker-using-google-tag-manager-and-the-leadfeeder-tracker-template"
 versions:
+  - sha: 9868c581062ad81dae02e2665405d3cd4e3cc05d
+    changeNotes: Allow users to set Leadfeeder cookie duration when Leadfeeder cookie is enabled in the app
   - sha: 1276b40b0de281df9a99b5240d2dfcf63892b94d
     changeNotes: Allow enabling the debug mode
   - sha: 5564454c9f4e00cda83e1797540fe1355aa8f5cf

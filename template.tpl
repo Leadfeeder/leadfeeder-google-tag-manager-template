@@ -62,6 +62,20 @@ ___TEMPLATE_PARAMETERS___
     "simpleValueType": true,
     "help": "When this checkbox is enabled the tracker will write verbose logs to the browser's developer console.\nWe suggest turning this on only while testing your tracking script in the GTM preview mode. Disabling it reduces the size of the Leadfeeder tracking script and is a suggested option for the production websites.\n",
     "alwaysInSummary": true
+  },
+  {
+    "type": "TEXT",
+    "name": "tracking_cookie_duration_days",
+    "displayName": "[Applicable if Leadfeeder Cookie enabled] Number of days until the Leadfeeder Cookie expires",
+    "simpleValueType": true,
+    "defaultValue": 730,
+    "valueValidators": [
+      {
+        "type": "POSITIVE_NUMBER"
+      }
+    ],
+    "help": "Defines for how many days between visits visitors are considered the same user. \nThis setting is ignored in case Leadfeeder Cookie is disabled in Leadfeeder app settings.\n",
+    "alwaysInSummary": true
   }
 ]
 
@@ -82,6 +96,7 @@ const versionlessTrackerId = data.lf_tracker_id.substring(startIndex).replace('_
 // Leadfeeder Tracker uses the arguments queue during initialization.
 const ldfdr = createArgumentsQueue('ldfdr', 'ldfdr._q');
 ldfdr('cfg', 'enableAutoTracking', data.autotrack, versionlessTrackerId);
+ldfdr('cfg', 'trackingCookieDurationDays', data.tracking_cookie_duration_days, versionlessTrackerId);
 
 // Once the preconfiguration is done we can inject the tracker's code to a page:
 const useDebug = data.enable_debug || data.lf_tracker_id.indexOf('_debug') >= 0;
@@ -233,7 +248,8 @@ scenarios:
     runCode(mockData);
     assertApi('injectScript').wasCalled();
 
-    assertThat(copyFromWindow('ldfdr')._q).isEqualTo([['cfg', 'enableAutoTracking', true, 'abcd']]);
+    assertThat(copyFromWindow('ldfdr')._q).isEqualTo([['cfg', 'enableAutoTracking', true, 'abcd'],
+                                                      ['cfg', 'trackingCookieDurationDays', 365, 'abcd']]);
 - name: Autotrack disabled test
   code: |-
     mockData.autotrack = false;
@@ -241,7 +257,8 @@ scenarios:
     runCode(mockData);
     assertApi('injectScript').wasCalled();
 
-    assertThat(copyFromWindow('ldfdr')._q).isEqualTo([['cfg', 'enableAutoTracking', false, 'abcd']]);
+    assertThat(copyFromWindow('ldfdr')._q).isEqualTo([['cfg', 'enableAutoTracking', false, 'abcd'],
+                                                      ['cfg', 'trackingCookieDurationDays', 365, 'abcd']]);
 - name: v1 prefix missing test
   code: |-
     mockData.lf_tracker_id = 'abcd';
@@ -253,7 +270,8 @@ scenarios:
     runCode(mockData);
     assertApi('injectScript').wasCalled();
 
-    assertThat(copyFromWindow('ldfdr')._q).isEqualTo([['cfg', 'enableAutoTracking', true, 'abcd']]);
+    assertThat(copyFromWindow('ldfdr')._q).isEqualTo([['cfg', 'enableAutoTracking', true, 'abcd'],
+                                                      ['cfg', 'trackingCookieDurationDays', 365, 'abcd']]);
 - name: debug script test
   code: |-
     mockData.lf_tracker_id = 'v1_abcd_debug';
@@ -265,7 +283,8 @@ scenarios:
     runCode(mockData);
     assertApi('injectScript').wasCalled();
 
-    assertThat(copyFromWindow('ldfdr')._q).isEqualTo([['cfg', 'enableAutoTracking', true, 'abcd']]);
+    assertThat(copyFromWindow('ldfdr')._q).isEqualTo([['cfg', 'enableAutoTracking', true, 'abcd'],
+                                                      ['cfg', 'trackingCookieDurationDays', 365, 'abcd']]);
 - name: debug script test without v1 prefix
   code: |-
     mockData.lf_tracker_id = 'abcd_debug';
@@ -277,7 +296,8 @@ scenarios:
     runCode(mockData);
     assertApi('injectScript').wasCalled();
 
-    assertThat(copyFromWindow('ldfdr')._q).isEqualTo([['cfg', 'enableAutoTracking', true, 'abcd']]);
+    assertThat(copyFromWindow('ldfdr')._q).isEqualTo([['cfg', 'enableAutoTracking', true, 'abcd'],
+                                                      ['cfg', 'trackingCookieDurationDays', 365, 'abcd']]);
 - name: enable debug field test
   code: |-
     mockData.enable_debug = true;
@@ -288,7 +308,8 @@ scenarios:
     runCode(mockData);
     assertApi('injectScript').wasCalled();
 
-    assertThat(copyFromWindow('ldfdr')._q).isEqualTo([['cfg', 'enableAutoTracking', true, 'abcd']]);
+    assertThat(copyFromWindow('ldfdr')._q).isEqualTo([['cfg', 'enableAutoTracking', true, 'abcd'],
+                                                      ['cfg', 'trackingCookieDurationDays', 365, 'abcd']]);
 setup: |-
   const copyFromWindow = require('copyFromWindow');
   const setInWindow = require('setInWindow');
@@ -297,7 +318,8 @@ setup: |-
 
   const mockData = {
     "lf_tracker_id": "v1_abcd",
-    "autotrack": true
+    "autotrack": true,
+    "tracking_cookie_duration_days": 365
   };
 
 ___NOTES___
