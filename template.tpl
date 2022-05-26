@@ -52,7 +52,7 @@ ___TEMPLATE_PARAMETERS___
     "checkboxText": "Automatic tracking",
     "simpleValueType": true,
     "defaultValue": true,
-    "help": "When this checkbox is enabled the tracker will send a pageview event anytime the tag is included.\nDisabling this field might be useful e.g. when Leadfeeder tracker is used with Single Page Applications.\nYou can read more about SPA tracking \u003ca href\u003d\"https://help.leadfeeder.com/en/articles/4519005-customize-your-site-tracking-with-leadfeeder-javascript-api\" target\u003d\"_blank\"\u003eLeadfeeder Help Center\u003c/a\u003e",
+    "help": "In automatic tracking, changes to the page URL will be tracked to identify new pageviews. This is recommended for most web apps including SPAs. If you want to report pageviews manually, please contact Leadfeeder support.",
     "alwaysInSummary": true
   },
   {
