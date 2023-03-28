@@ -68,7 +68,7 @@ ___TEMPLATE_PARAMETERS___
     "name": "tracking_cookie_duration_days",
     "displayName": "[Applicable if Leadfeeder Cookie enabled] Number of days until the Leadfeeder Cookie expires",
     "simpleValueType": true,
-    "defaultValue": 730,
+    "defaultValue": 365,
     "valueValidators": [
       {
         "type": "POSITIVE_NUMBER"
@@ -249,7 +249,7 @@ scenarios:
     assertApi('injectScript').wasCalled();
 
     assertThat(copyFromWindow('ldfdr')._q).isEqualTo([['cfg', 'enableAutoTracking', true, 'abcd'],
-                                                      ['cfg', 'trackingCookieDurationDays', 365, 'abcd']]);
+                                                      ['cfg', 'trackingCookieDurationDays', 300, 'abcd']]);
 - name: Autotrack disabled test
   code: |-
     mockData.autotrack = false;
@@ -258,7 +258,7 @@ scenarios:
     assertApi('injectScript').wasCalled();
 
     assertThat(copyFromWindow('ldfdr')._q).isEqualTo([['cfg', 'enableAutoTracking', false, 'abcd'],
-                                                      ['cfg', 'trackingCookieDurationDays', 365, 'abcd']]);
+                                                      ['cfg', 'trackingCookieDurationDays', 300, 'abcd']]);
 - name: v1 prefix missing test
   code: |-
     mockData.lf_tracker_id = 'abcd';
@@ -271,7 +271,7 @@ scenarios:
     assertApi('injectScript').wasCalled();
 
     assertThat(copyFromWindow('ldfdr')._q).isEqualTo([['cfg', 'enableAutoTracking', true, 'abcd'],
-                                                      ['cfg', 'trackingCookieDurationDays', 365, 'abcd']]);
+                                                      ['cfg', 'trackingCookieDurationDays', 300, 'abcd']]);
 - name: debug script test
   code: |-
     mockData.lf_tracker_id = 'v1_abcd_debug';
@@ -284,7 +284,7 @@ scenarios:
     assertApi('injectScript').wasCalled();
 
     assertThat(copyFromWindow('ldfdr')._q).isEqualTo([['cfg', 'enableAutoTracking', true, 'abcd'],
-                                                      ['cfg', 'trackingCookieDurationDays', 365, 'abcd']]);
+                                                      ['cfg', 'trackingCookieDurationDays', 300, 'abcd']]);
 - name: debug script test without v1 prefix
   code: |-
     mockData.lf_tracker_id = 'abcd_debug';
@@ -297,7 +297,7 @@ scenarios:
     assertApi('injectScript').wasCalled();
 
     assertThat(copyFromWindow('ldfdr')._q).isEqualTo([['cfg', 'enableAutoTracking', true, 'abcd'],
-                                                      ['cfg', 'trackingCookieDurationDays', 365, 'abcd']]);
+                                                      ['cfg', 'trackingCookieDurationDays', 300, 'abcd']]);
 - name: enable debug field test
   code: |-
     mockData.enable_debug = true;
@@ -309,7 +309,7 @@ scenarios:
     assertApi('injectScript').wasCalled();
 
     assertThat(copyFromWindow('ldfdr')._q).isEqualTo([['cfg', 'enableAutoTracking', true, 'abcd'],
-                                                      ['cfg', 'trackingCookieDurationDays', 365, 'abcd']]);
+                                                      ['cfg', 'trackingCookieDurationDays', 300, 'abcd']]);
 setup: |-
   const copyFromWindow = require('copyFromWindow');
   const setInWindow = require('setInWindow');
@@ -319,7 +319,7 @@ setup: |-
   const mockData = {
     "lf_tracker_id": "v1_abcd",
     "autotrack": true,
-    "tracking_cookie_duration_days": 365
+    "tracking_cookie_duration_days": 300
   };
 
 ___NOTES___
